@@ -2,7 +2,8 @@ from flask import Flask
 
 from config import Config
 from .extensions import db, bcrypt, migrate
-from .routes.auth import auth_bp
+
+from .views import auth_bp
 
 
 def create_app():
@@ -15,5 +16,5 @@ def create_app():
     migrate.init_app(app, db)
 
     # 注册蓝图
-    app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(auth_bp)
     return app

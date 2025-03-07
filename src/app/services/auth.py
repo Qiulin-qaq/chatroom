@@ -1,6 +1,11 @@
 from flask import jsonify
 
 from ..models.user import User
+from ..models.chatroom import ChatRoom
+from ..models.friend import Friend
+from ..models.private_session import PrivateSession
+from ..models.message import Message
+from ..models.room_member import RoomMember
 from ..extensions import db
 from ..utils.R import R
 

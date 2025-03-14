@@ -18,6 +18,7 @@ class RoomMember(db.Model):
         return {
             'id': self.id,
             'room_id': self.room_id,
+            'room_name': self.room.name,
             'user_id': self.user_id,
             'role': self.role,
             'joined_time': self.joined_time.strftime('%Y-%m-%d %H:%M:%S')

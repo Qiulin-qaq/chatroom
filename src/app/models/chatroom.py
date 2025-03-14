@@ -10,6 +10,13 @@ class ChatRoom(db.Model):
     created_time = db.Column(db.DateTime, nullable=False)
     creator = db.relationship('User', backref='created_chatrooms')
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'creator_id': self.creator_id,
+            'created_time': self.created_time.strftime('%Y-%m-%d %H:%M:%S'),
 
+        }
 
 

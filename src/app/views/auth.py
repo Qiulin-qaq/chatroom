@@ -41,8 +41,8 @@ def validate_phone_and_pwd(func):
 # 注册
 @auth_bp.route('/register', methods=['POST'])
 @validate_phone_and_pwd
-def register_view(telephone, pwd):
-    result = register(telephone, pwd)
+def register_view(nickname, telephone, pwd):
+    result = register(nickname, telephone, pwd)
 
     return jsonify(result), result['code']
 

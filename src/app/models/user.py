@@ -1,12 +1,14 @@
 from datetime import datetime
+
+from flask_login import UserMixin
 from ..extensions import db, bcrypt
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
-    nickname = db.Column(db.String(64),  nullable=False)
+    nickname = db.Column(db.String(64), nullable=False)
     telephone = db.Column(db.String(11), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     created_time = db.Column(db.DateTime, default=datetime.utcnow)
@@ -31,3 +33,5 @@ class User(db.Model):
             'created_time': self.created_time.strftime('%Y-%m-%d %H:%M:%S'),
 
         }
+
+

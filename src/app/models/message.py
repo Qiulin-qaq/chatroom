@@ -1,6 +1,7 @@
 from datetime import datetime
 from ..extensions import db
 
+
 class Message(db.Model):
     __tablename__ = 'message'
 
@@ -26,7 +27,7 @@ class Message(db.Model):
             'room_id': self.room_id,
             'private_session_id': self.private_session_id,
             'content': self.content,
-            'message_status': self.message_status,
+
             'sent_time': self.sent_time.strftime('%Y-%m-%d %H:%M:%S'),
             'is_deleted': self.is_deleted
         }

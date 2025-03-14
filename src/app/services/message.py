@@ -12,7 +12,7 @@ def send_message(data):
     try:
         room_id = data['room_id']
         content = data['content']
-        print(data['room_id'])
+
         room = db.session.query(RoomMember).filter_by(room_id=room_id).first()
         if not room:
             return R.fail(message='聊天室不存在')

@@ -11,7 +11,7 @@ from ..extensions import db
 from ..utils.R import R
 
 
-def register(nickname,telephone, password):
+def register(telephone, password, nickname):
     user = User.query.filter_by(telephone=telephone).first()
     if user:
         return R.fail(message='手机号已被注册')

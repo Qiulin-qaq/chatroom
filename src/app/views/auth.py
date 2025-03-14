@@ -23,6 +23,7 @@ def validate_phone_and_pwd(func):
     def wrapper(*args, **kwargs):
         telephone = request.form.get('telephone', '').strip()
         pwd = request.form.get('password', '').strip()
+        nickname = request.form.get('nickname', '').strip()
 
         if not telephone or not pwd:
             return jsonify(R.fail(message='手机号和密码不能为空')), 400
@@ -33,7 +34,10 @@ def validate_phone_and_pwd(func):
         if len(pwd) < 6:
             return jsonify(R.fail(message='密码长度至少6位')), 400
 
-        return func(telephone, pwd, *args, **kwargs)
+        if request.endpoint == 'auth.register_view':
+            return func(telephone, pwd, nickname, *args, **kwargs)
+        else:
+            return func(telephone, pwd, *args, **kwargs)
 
     return wrapper
 
@@ -41,8 +45,9 @@ def validate_phone_and_pwd(func):
 # 注册
 @auth_bp.route('/register', methods=['POST'])
 @validate_phone_and_pwd
-def register_view(nickname, telephone, pwd):
-    result = register(nickname, telephone, pwd)
+def register_view(telephone, pwd, nickname):
+
+    result = register(telephone, pwd, nickname)
 
     return jsonify(result), result['code']
 

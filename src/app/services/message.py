@@ -42,17 +42,17 @@ def send_message(data):
             user_id=current_user.id,
             room_id=room_id,
             content=content,
-            sent_time=datetime.utcnow(),
+            sent_time=datetime.now(),
             session_type='group'
         )
         db.session.add(message)
         db.session.commit()
 
-        return R.ok(message='发送成功', data=message.to_dict())
+        return R.ok(message='发送成功', data=message.to_dict(), code=200)
 
     except Exception as e:
         db.session.rollback()
-        return R.fail(message=str(e))
+        return R.fail(message=str(e)), 500
 
 
 def get_message(data):
@@ -79,11 +79,16 @@ def get_message(data):
     try:
         # 参数验证
         room_id = data['room_id']
-        sent_time = data['send_time']
+        sent_time = data.get('send_time')
+        sender_id = data.get('sender_id')  # 使用get方法避免KeyError
+        
         if not room_id or not isinstance(room_id, int):
             current_app.logger.warning(f"无效的聊天室ID: {room_id}")
             return R.fail(message="无效的聊天室ID", code=400)
-
+        # 新增sender_id类型验证
+        if sender_id and not isinstance(sender_id, int):
+            return R.fail(message="发送者ID格式错误", code=400)
+        
         # 权限验证
         membership = RoomMember.query.filter_by(
             room_id=room_id,
@@ -102,6 +107,9 @@ def get_message(data):
 
         # 构建查询
         query = Message.query.filter_by(room_id=room_id)
+        # 添加发送者过滤条件
+        if sender_id:
+            query = query.filter(Message.user_id == sender_id)
         if filter_time > base_time:
             query = query.filter(Message.sent_time > filter_time)
 
@@ -110,7 +118,10 @@ def get_message(data):
         return R.ok(data=[{
             "id": msg.id,
             "content": msg.content,
-            "sender": msg.user_id,
+            "sender": {  # 优化返回结构
+                "user_id": msg.user_id,
+                "nickname": msg.user.nickname  # 需要User模型关联
+            },
             "sent_time": msg.sent_time.isoformat()
         } for msg in messages])
 

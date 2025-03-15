@@ -25,10 +25,13 @@ def create_app():
     from .views.auth import auth_bp
     from .views.chat import chat_bp
     from .views.message import  ms_bp
+    from .views.friend import  fr_bp
+
     # 注册蓝图
     app.register_blueprint(auth_bp)
     app.register_blueprint(chat_bp)
     app.register_blueprint(ms_bp)
+    app.register_blueprint(fr_bp)
 
     # 加载用户模型并配置用户加载器
     @login_manager.user_loader

@@ -1,3 +1,5 @@
+from flask_socketio import SocketIO
+
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -16,6 +18,9 @@ migrate = Migrate()
 
 # 初始化 Flask-Login
 login_manager = LoginManager()
+
+# 初始化SocketIO
+socketio = SocketIO()
 
 
 

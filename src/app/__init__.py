@@ -1,7 +1,7 @@
 from flask import Flask
 
 from config import Config
-from .extensions import db, bcrypt, migrate, login_manager
+from .extensions import db, bcrypt, migrate, login_manager, socketio
 
 from .views import auth_bp, chat_bp, ms_bp
 
@@ -17,6 +17,7 @@ def create_app():
     bcrypt.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
+    socketio.init_app(app, cors_allowed_origins="*", allow_upgrades=True)
 
     # 配置登录视图
     login_manager.login_view = 'auth.login_view'  # 指定登录页面的路由
@@ -32,4 +33,4 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    return app
+    return app, socketio

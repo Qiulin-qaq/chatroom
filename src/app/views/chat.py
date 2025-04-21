@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_login import login_required
 
 
-from ..services.chat import create_chatroom, list_chatroom
+from ..services.chat import create_chatroom, list_chatroom, join_chatroom
 
 from flask import request, jsonify
 
@@ -25,4 +25,15 @@ def create_chatroom_view():
 @login_required
 def list_chatroom_view():
     result = list_chatroom()
+    return jsonify(result), result['code']
+
+@chat_bp.route('/chatroom/join', methods=["POST"])
+@login_required
+def join_chatroom_view():
+
+    data = request.get_json()
+
+    # 调用服务
+    result = join_chatroom(data)
+
     return jsonify(result), result['code']

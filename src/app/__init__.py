@@ -3,7 +3,7 @@ from flask import Flask
 from config import Config
 from .extensions import db, bcrypt, migrate, login_manager, socketio
 
-from .views import auth_bp, chat_bp, ms_bp
+
 
 from .models.user import User
 
@@ -23,10 +23,16 @@ def create_app():
     login_manager.login_view = 'auth.login_view'  # 指定登录页面的路由
     login_manager.login_message = '请先登录以访问此页面'  # 登录提示信息
 
+    from .views.auth import auth_bp
+    from .views.chat import chat_bp
+    from .views.message import  ms_bp
+    from .views.friend import  fr_bp
+
     # 注册蓝图
     app.register_blueprint(auth_bp)
     app.register_blueprint(chat_bp)
     app.register_blueprint(ms_bp)
+    app.register_blueprint(fr_bp)
 
     # 加载用户模型并配置用户加载器
     @login_manager.user_loader
